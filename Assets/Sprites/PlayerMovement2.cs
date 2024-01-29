@@ -89,24 +89,24 @@ public class PlayerMovement2 : MonoBehaviour {
   }
 
 
-  private void OnTriggerEnter2D(Collider2D collision) {
+ private void OnTriggerEnter2D(Collider2D collision) {
     if (collision.CompareTag("Finish") && checkChecked)
     {
       Laps++;
+      shipAcceleration = 10f;
+      runningSpeed = 100f;
       checkChecked = false;
-      Debug.Log("Player 2 laps: " + Laps);
-      // Get a reference to the GameManager 
-      /*GameManager gameManager = FindAnyObjectByType<GameManager>();
-
-      // Restart game after delay.
-      gameManager.GameOver();
-
-      // Destroy the player.
-      Destroy(gameObject); */
+      Debug.Log("Player 1 laps: " + Laps);
     }
     if (collision.CompareTag("Checkpoint"))
     {
         checkChecked = true;
+    }
+    if (collision.CompareTag("Oil"))
+    {
+      shipAcceleration = 3f;
+      runningSpeed = 30f;
+      collision.gameObject.SetActive(false);
     }
   }
 }

@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour {
 
   private float Laps = 0f; 
 
+  private bool goalCheck = false;
+
 
   public AudioSource Deathsound;
 
@@ -65,7 +67,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
   private void HandleShipRunning() {
-    if ((Input.GetKey(KeyCode.W)) && Input.GetKey(KeyCode.LeftShift)) {
+    if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.LeftShift)) {
         Debug.Log("Running");
         isRunning = true;
     } else {
@@ -90,23 +92,27 @@ public class PlayerMovement : MonoBehaviour {
 
 
   private void OnTriggerEnter2D(Collider2D collision) {
-    if (collision.CompareTag("Finish") && checkChecked)
+    if (collision.CompareTag("Finish") && checkChecked && goalCheck)
     {
       Laps++;
+      shipAcceleration = 10f;
+      runningSpeed = 100f;
       checkChecked = false;
       Debug.Log("Player 1 laps: " + Laps);
-      // Get a reference to the GameManager 
-      /*GameManager gameManager = FindAnyObjectByType<GameManager>();
-
-      // Restart game after delay.
-      gameManager.GameOver();
-
-      // Destroy the player.
-      Destroy(gameObject); */
     }
     if (collision.CompareTag("Checkpoint"))
     {
         checkChecked = true;
+    }
+    if (collision.CompareTag("Oil"))
+    {
+      shipAcceleration = 3f;
+      runningSpeed = 30f;
+      collision.gameObject.SetActive(false);
+    }
+    if (collision.CompareTag("GoalCheck"))
+    {
+      goalCheck = true;
     }
   }
 }
